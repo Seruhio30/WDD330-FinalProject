@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sergio Herrera Rivera">
+    <meta name="description"
+        content="SmartChef is a web application that suggests recipes based on the ingredients users already have at home.">
+    <meta property="og:title" content="SmartChef: Recipe Finder by Ingredients">
+    <meta property="og:description"
+        content="SmartChef is a web application that suggests recipes based on the ingredients users already have at home.">
+    <meta property="og:image" content="">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+    <title>SmartChef</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>SmartChef 🍳</h1>
+        <p>Encuentra recetas con lo que ya tienes</p>
+    </header>
+    <main>
+        <input type="text" id="ingredientInput" placeholder="Ej. tomate, arroz, pollo" />
+        <button id="searchBtn">Buscar</button>
+
+        <select id="mealType">
+            <option value="">Tipo de comida</option>
+            <option value="breakfast">Desayuno</option>
+            <option value="main course">Plato principal</option>
+        </select>
+
+        <select id="diet">
+            <option value="">Dieta</option>
+            <option value="vegetarian">Vegetariana</option>
+            <option value="gluten free">Sin gluten</option>
+        </select>
+
+        <div id="results"></div>
+        <footer></footer>
+        <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

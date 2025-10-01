@@ -1,0 +1,19 @@
+/* style.css */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background: #fdfdfd;
+}
+
+input, button {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+#results {
+  display: grid;
+  gap: 1rem;
+}
