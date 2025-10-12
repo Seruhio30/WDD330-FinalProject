@@ -7,3 +7,4 @@ export async function fetchRecipes(ingredients, mealType = '', diet = '') {
   console.log('API response:', data); // Verifica estructura
   return data;
 }
+

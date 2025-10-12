@@ -1,3 +1,16 @@
+// recipeDetails.js
+// Displays full recipe details and connects nutrition estimation
+// Muestra detalles completos de la receta y conecta la estimación nutricional
+
+
+import { renderRecipes } from './resultsView.js'; // Para volver a la lista
+import { fetchNutritionForIngredient } from './nutritionixHandler.js';
+import { lastIngredients } from './ingredientSearch.js';
+import { saveToFavorites } from './favoritesHandler.js';
+
+
+// Fetches full recipe info from Spoonacular by ID
+// Obtiene información completa de la receta desde Spoonacular por ID
 export async function showRecipeDetails(id) {
   const apiKey = '3486456142aa411da24e68f88aa2348b';
   const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
@@ -5,12 +18,14 @@ export async function showRecipeDetails(id) {
   const res = await fetch(url);
   const data = await res.json();
 
-  renderDetails(data);
+  renderDetails(data, lastIngredients); // Renderiza detalles y pasa ingredientes del usuario
 }
 
-//esta funcion me alista el terreno para ver los detalles de la recta
-function renderDetails(recipe) {
+// Renders recipe details and connects buttons
+// Renderiza los detalles de la receta y conecta los botones
+export function renderDetails(recipe, userIngredients) {
   const container = document.getElementById('results');
+  container.className = 'recipe-details';
   container.innerHTML = `
     <h2>${recipe.title}</h2>
     <img src="${recipe.image}" alt="${recipe.title}" />
@@ -21,6 +36,83 @@ function renderDetails(recipe) {
     </ul>
     <h3>Procedimiento:</h3>
     <p>${recipe.instructions || 'No hay instrucciones disponibles.'}</p>
-    <button onclick="location.reload()">🔙 Volver</button>
+    
+    <button id="backBtn">🔙 Volver</button>
+  `;
+ // Botón de favoritos ♥
+const favBtn = document.createElement('button');
+favBtn.textContent = '♥';
+favBtn.className = 'fav-btn';
+favBtn.style.margin = '10px';
+
+favBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  saveToFavorites(recipe.id, recipe.title);
+  favBtn.textContent = '❤️';
+
+  // Activar animación
+  favBtn.classList.add('saved');
+  setTimeout(() => favBtn.classList.remove('saved'), 400);
+});
+
+  // Insertar el botón justo después del título
+  const titleElement = container.querySelector('h2');
+  titleElement.insertAdjacentElement('afterend', favBtn);
+
+
+  // Button to go back to recipe list
+  // Botón para volver a la lista de recetas
+  document.getElementById('backBtn').addEventListener('click', () => {
+    container.className = '';
+    renderRecipes(lastResults);
+  });
+
+  // Button to trigger nutrition estimation
+  // Botón para activar estimación nutricional
+  const nutritionBtn = document.createElement('button');
+  nutritionBtn.textContent = 'Ver nutrición estimada';
+  nutritionBtn.id = 'nutritionEstimateBtn';
+  container.appendChild(nutritionBtn);
+
+  nutritionBtn.addEventListener('click', async () => {
+    await renderNutritionBox(userIngredients);
+  });
+
+
+}
+
+// Renders estimated nutrition using API Ninjas
+// Renderiza nutrición estimada usando API Ninjas
+export async function renderNutritionBox(ingredients) {
+  const container = document.getElementById('results');
+  const box = document.createElement('div');
+  box.className = 'nutrition-box';
+  box.innerHTML = '<p>Calculando nutrición estimada...</p>';
+  container.appendChild(box);
+
+  let total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  const sinDatos = [];
+
+  for (const ing of ingredients) {
+    const data = await fetchNutritionForIngredient(ing);
+    if (!data) {
+      sinDatos.push(ing);
+      continue;
+    }
+    total.calories += data.calories;
+    total.protein += data.protein;
+    total.fat += data.fat;
+    total.carbs += data.carbs;
+  }
+
+  box.innerHTML = `
+    <h3>Nutrición estimada</h3>
+    <ul>
+      <li>Calorías: ${total.calories.toFixed(1)} kcal</li>
+      <li>Proteínas: ${total.protein.toFixed(1)} g</li>
+      <li>Grasas: ${total.fat.toFixed(1)} g</li>
+      <li>Carbohidratos: ${total.carbs.toFixed(1)} g</li>
+    </ul>
+    ${sinDatos.length > 0 ? `<p class="note">⚠️ Sin datos para: ${sinDatos.join(', ')}</p>` : ''}
   `;
 }
