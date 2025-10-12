@@ -59,73 +59,32 @@ export async function handleSearch() {
     const message = `No se encontraron recetas con esos ingredientes en la categoría "${mealType || 'cualquiera'}" y dieta "${diet || 'sin restricción'}".`;
     document.getElementById('results').innerHTML = `<p>${message}</p>`;
   }
+
 }
 
-// Estimates nutrition based on user ingredients using USDA API
-// Estima nutrición basada en ingredientes del usuario usando la API de USDA
-export async function renderEstimatedNutrition(userIngredients) {
-  if (!Array.isArray(userIngredients)) {
-    console.error('renderEstimatedNutrition recibió un tipo inválido:', userIngredients);
-    return;
-  }
 
-  const container = document.getElementById('results');
-  container.innerHTML = ''; // Clear previous results
-  const loading = document.createElement('p');
-  loading.textContent = 'Calculando nutrición estimada...';
-  container.appendChild(loading);
 
-  let totalCalories = 0;
-  let totalProtein = 0;
-  let totalFat = 0;
-  let totalCarbs = 0;
-  const sinDatos = []; // Ingredients with no data
-
-  for (const ing of userIngredients) {
-    console.log(`🔍 Buscando nutrición para "${ing}"`);
-    const nutrition = await fetchNutritionForIngredient(ing);
-    console.log(`📥 Recibido para "${ing}":`, nutrition);
-
-    if (!nutrition || (
-      nutrition.calories === 0 &&
-      nutrition.protein === 0 &&
-      nutrition.fat === 0 &&
-      nutrition.carbs === 0
-    )) {
-      sinDatos.push(ing);
-      continue;
-    }
-
-    totalCalories += nutrition.calories;
-    totalProtein += nutrition.protein;
-    totalFat += nutrition.fat;
-    totalCarbs += nutrition.carbs;
-  }
-
-  container.removeChild(loading);
-
-  const box = document.createElement('div');
-  box.className = 'nutrition-box';
-
-  if (sinDatos.length === userIngredients.length) {
-    console.log(`📈 Totales → Cal: ${totalCalories}, Prot: ${totalProtein}, Fat: ${totalFat}, Carb: ${totalCarbs}`);
-    box.innerHTML = `
-      <h3>Nutrición estimada</h3>
-      <p class="note">⚠️ No se encontraron datos nutricionales útiles para los ingredientes ingresados.</p>
-    `;
-  } else {
-    box.innerHTML = `
-      <h3>Nutrición estimada</h3>
-      <ul>
-        <li>Calorías: ${totalCalories.toFixed(1)} kcal</li>
-        <li>Proteínas: ${totalProtein.toFixed(1)} g</li>
-        <li>Grasas: ${totalFat.toFixed(1)} g</li>
-        <li>Carbohidratos: ${totalCarbs.toFixed(1)} g</li>
-      </ul>
-      <p class="note">* Basado en: ${userIngredients.filter(i => !sinDatos.includes(i)).join(', ')}.</p>
-      ${sinDatos.length > 0 ? `<p class="note">⚠️ Sin datos para: ${sinDatos.join(', ')}</p>` : ''}
-    `;
-  }
-
-  container.appendChild(box);
+export function saveSearchHistory(query) {
+  const stored = JSON.parse(localStorage.getItem('searchHistory')) || [];
+  const updated = [query, ...stored.filter(item => item !== query)].slice(0, 5);
+  localStorage.setItem('searchHistory', JSON.stringify(updated));
 }
+
+export function renderSearchHistory() {
+  const container = document.getElementById('searchHistoryContainer');
+  const stored = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+  container.innerHTML = '<h4>Historial:</h4>';
+  stored.forEach(query => {
+    const btn = document.createElement('button');
+    btn.textContent = query;
+    btn.className = 'history-btn';
+    btn.addEventListener('click', () => {
+      document.getElementById('ingredientInput').value = query;
+      document.getElementById('searchBtn').click();
+    });
+    container.appendChild(btn);
+  });
+}
+
+

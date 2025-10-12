@@ -1,18 +1,16 @@
 export function saveToFavorites(id, title) {
-    let stored;
-    try {
-        stored = JSON.parse(localStorage.getItem('favorites'));
-        if (!Array.isArray(stored)) stored = [];
-    } catch {
-        stored = [];
-    }
+  let stored;
+  try {
+    stored = JSON.parse(localStorage.getItem('favorites'));
+    if (!Array.isArray(stored)) stored = [];
+  } catch {
+    stored = [];
+  }
 
-    const exist = stored.find(item => item === id);
-    if (exist) return;
-
+  const exists = stored.some(item => item.id === id);
+  if (!exists) {
     stored.push({ id, title });
-    localStorage.setItem('favorites', JSON.stringify(Storage));
-    console.log(`✅ Guardado en favoritos: ${title} (ID: ${id})`);
-
-
+    localStorage.setItem('favorites', JSON.stringify(stored));
+    console.log(`✅ Guardado en favoritos: ${title}`);
+  }
 }

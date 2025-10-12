@@ -62,10 +62,12 @@ favBtn.addEventListener('click', (e) => {
 
   // Button to go back to recipe list
   // Botón para volver a la lista de recetas
-  document.getElementById('backBtn').addEventListener('click', () => {
-    container.className = '';
-    renderRecipes(lastResults);
-  });
+ document.getElementById('backBtn').addEventListener('click', () => {
+  container.className = '';
+  container.innerHTML = ''; // 🔧 limpia el contenido
+  renderRecipes(lastResults); // 🔁 vuelve a mostrar la lista
+});
+
 
   // Button to trigger nutrition estimation
   // Botón para activar estimación nutricional
