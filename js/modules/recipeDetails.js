@@ -42,7 +42,7 @@ export function renderDetails(recipe, userIngredients) {
 
   // Botón de compartir receta
   document.getElementById('shareBtn').addEventListener('click', () => {
-   const recipeUrl = `https:// https://seruhio30.github.io/WDD330-FinalProject/recipe.html?id=${recipe.id}`;
+   const recipeUrl = `https://seruhio30.github.io/WDD330-FinalProject/recipe.html?id=${recipe.id}`;
 
     navigator.clipboard.writeText(recipeUrl)
       .then(() => {
