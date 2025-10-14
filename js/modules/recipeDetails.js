@@ -7,6 +7,7 @@ import { fetchNutritionForIngredient } from './nutritionixHandler.js';
 import { lastIngredients, lastResults } from './ingredientSearch.js';
 import { saveToFavorites } from './favoritesHandler.js';
 
+
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
 export async function showRecipeDetails(id) {
