@@ -21,7 +21,7 @@ export async function showRecipeDetails(id) {
 }
 
 // Renders recipe details and connects buttons
-// Renderiza los detalles de la receta y conecta los botones
+// Renderiza los detalles de la receta y conecta los botones 
 export function renderDetails(recipe, userIngredients) {
   const container = document.getElementById('results');
   container.className = 'recipe-details';
