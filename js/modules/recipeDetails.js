@@ -2,12 +2,10 @@
 // Displays full recipe details and connects nutrition estimation
 // Muestra detalles completos de la receta y conecta la estimación nutricional
 
-
 import { renderRecipes } from './resultsView.js'; // Para volver a la lista
 import { fetchNutritionForIngredient } from './nutritionixHandler.js';
-import { lastIngredients } from './ingredientSearch.js';
+import { lastIngredients, lastResults } from './ingredientSearch.js';
 import { saveToFavorites } from './favoritesHandler.js';
-
 
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
@@ -38,38 +36,50 @@ export function renderDetails(recipe, userIngredients) {
     <p>${recipe.instructions || 'No hay instrucciones disponibles.'}</p>
     
     <button id="backBtn">🔙 Volver</button>
+    <button class="btn secondary" id="shareBtn">🔗 Compartir receta</button>
   `;
- // Botón de favoritos ♥
-const favBtn = document.createElement('button');
-favBtn.textContent = '♥';
-favBtn.className = 'fav-btn';
-favBtn.style.margin = '10px';
 
-favBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  saveToFavorites(recipe.id, recipe.title);
-  favBtn.textContent = '❤️';
+  // Botón de compartir receta
+  document.getElementById('shareBtn').addEventListener('click', () => {
+   const recipeUrl = `https:// https://seruhio30.github.io/WDD330-FinalProject/recipe.html?id=${recipe.id}`;
 
-  // Activar animación
-  favBtn.classList.add('saved');
-  setTimeout(() => favBtn.classList.remove('saved'), 400);
-});
+    navigator.clipboard.writeText(recipeUrl)
+      .then(() => {
+        alert('📋 Enlace copiado al portapapeles');
+      })
+      .catch(err => {
+        console.error('Error al copiar enlace:', err);
+        alert('❌ No se pudo copiar el enlace');
+      });
+  });
+
+  // Botón de favoritos ♥
+  const favBtn = document.createElement('button');
+  favBtn.textContent = '♥';
+  favBtn.className = 'fav-btn';
+  favBtn.style.margin = '10px';
+
+  favBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    saveToFavorites(recipe.id, recipe.title);
+    favBtn.textContent = '❤️';
+
+    // Activar animación
+    favBtn.classList.add('saved');
+    setTimeout(() => favBtn.classList.remove('saved'), 400);
+  });
 
   // Insertar el botón justo después del título
   const titleElement = container.querySelector('h2');
   titleElement.insertAdjacentElement('afterend', favBtn);
 
-
-  // Button to go back to recipe list
   // Botón para volver a la lista de recetas
- document.getElementById('backBtn').addEventListener('click', () => {
-  container.className = '';
-  container.innerHTML = ''; // 🔧 limpia el contenido
-  renderRecipes(lastResults); // 🔁 vuelve a mostrar la lista
-});
+  document.getElementById('backBtn').addEventListener('click', () => {
+    container.className = '';
+    container.innerHTML = ''; // 🔧 limpia el contenido
+    renderRecipes(lastResults); // 🔁 vuelve a mostrar la lista
+  });
 
-
-  // Button to trigger nutrition estimation
   // Botón para activar estimación nutricional
   const nutritionBtn = document.createElement('button');
   nutritionBtn.textContent = 'Ver nutrición estimada';
@@ -79,8 +89,6 @@ favBtn.addEventListener('click', (e) => {
   nutritionBtn.addEventListener('click', async () => {
     await renderNutritionBox(userIngredients);
   });
-
-
 }
 
 // Renders estimated nutrition using API Ninjas

@@ -1,21 +1,35 @@
 /* style.css */
 
 :root {
-  --color-primary: #4CAF50;
-  --color-accent: #FF9800;
-  --color-bg: #FFFFFF;
+  /* Colores base */
+  --color-primary: #4CAF50;       /* Verde principal */
+  --color-accent: #FF9800;        /* Naranja de acento */
+  --color-bg: #FFFFFF;            /* Fondo claro */
+  --color-text: #333;             /* Texto principal */
+
+  /* Botones */
+  --btn-color: #ffcc70;           /* Amarillo botón */
+  --btn-hover: #ffb347;           /* Hover botón */
+  --btn-danger: #f44336;          /* Rojo eliminar */
+  --btn-danger-hover: #d32f2f;
+  --btn-secondary: #e0e0e0;       /* Gris secundario */
+  --btn-secondary-hover: #d5d5d5;
+
+  /* Tipografías */
   --font-main: 'Open Sans', sans-serif;
   --font-alt: 'Roboto', sans-serif;
 }
+
+
+/***** Estructura base *****/
 
 body {
   font-family: var(--font-main);
   margin: 0;
   padding: 1rem;
   background: var(--color-bg);
-  color: #333;
+  color: var(--color-text);
 }
-
 
 h1,
 h2,
@@ -24,44 +38,162 @@ h3 {
   color: var(--color-primary);
 }
 
-/*****Botones y Inputs******/
+
+/***** Navegación *****/
+
+nav {
+  background-color: var(--color-bg);
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+nav li {
+  display: inline-flex;
+}
+
+
+/***** Botones reutilizables *****/
+
+.btn,
+.nav-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 5px;
+  background-color: var(--btn-color);
+  color: var(--color-text);
+  text-decoration: none;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  max-width: fit-content;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn:hover,
+.nav-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+.btn:active,
+.nav-btn:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/***** Variantes de botón *****/
+
+.btn.secondary {
+  background-color: var(--btn-secondary);
+  color: var(--color-text);
+}
+
+.btn.secondary:hover {
+  background-color: var(--btn-secondary-hover);
+}
+
+.btn.danger,
+.remove-btn {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+.btn.danger:hover,
+.remove-btn:hover {
+  background-color: var(--btn-danger-hover);
+}
+
+
+/***** Botón de favoritos ♥ *****/
+
+.fav-btn {
+  background-color: transparent;
+  border: 2px solid var(--btn-color);
+  color: var(--btn-color);
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fav-btn:hover {
+  background-color: var(--btn-color);
+  color: var(--color-text);
+}
+
+.fav-btn.saved {
+  animation: pulse 0.4s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+
+/***** Inputs y selects *****/
 
 input,
-select,
-button {
+select {
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-family: var(--font-main);
 }
 
+
+/***** Botón genérico (por defecto) *****/
+
 button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
   background-color: var(--color-accent);
   color: white;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-family: var(--font-main);
 }
 
 button:hover {
   background-color: #e67e00;
 }
 
-/******Tarjetas de Recetas*******/
+
+/****** Tarjetas de Recetas ******/
 
 .recipe-card {
-  background-color: #f9f9f9;
+  background-color: var(--color-bg);
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .recipe-card:hover {
   transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .recipe-card img {
@@ -78,7 +210,9 @@ button:hover {
   text-align: center;
 }
 
-/*como no lee los styles para details, aplico una condicion en css, tomada de stack over flow*/
+
+/****** Contenedor de resultados ******/
+
 #results {
   display: grid;
   grid-template-columns: 1fr;
@@ -97,7 +231,8 @@ button:hover {
 }
 
 
-/*******Detalees de la receta********/
+/****** Vista de Detalles de Receta ******/
+
 .recipe-details {
   display: flex;
   flex-direction: column;
@@ -106,7 +241,7 @@ button:hover {
   padding: 1rem;
   background-color: var(--color-bg);
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .recipe-details img {
@@ -114,7 +249,6 @@ button:hover {
   height: auto;
   border-radius: 6px;
   object-fit: cover;
-
 }
 
 .recipe-details ul {
@@ -129,6 +263,12 @@ button:hover {
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease;
+}
+
+.recipe-details button:hover {
+  background-color: #e67e00;
 }
 
 /*****favorites*/
@@ -140,9 +280,11 @@ button:hover {
   cursor: pointer;
 }*/
 
+/****** Botón de favoritos ♥ ******/
+
 .fav-btn {
   font-size: 1.5rem;
-  color: crimson;
+  color: var(--btn-danger); /* crimson → rojo definido */
   background: none;
   border: none;
   cursor: pointer;
@@ -166,23 +308,39 @@ button:hover {
 }
 
 
+/****** Contenedor de favoritos ******/
+
 .fav-box {
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
+  background-color: var(--color-bg);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+
+
+/****** Botón de eliminar ******/
 
 .remove-btn {
-  background-color: #f44336;
+  background-color: var(--btn-danger);
   color: white;
   border: none;
-  padding: 5px;
+  padding: 5px 10px;
+  margin-top: 8px;
+  border-radius: 4px;
   cursor: pointer;
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background-color: var(--btn-danger-hover);
 }
 
 
+/****** Media queries para layout responsivo ******/
 
-/******Medias query********/
 @media (min-width: 768px) {
   #results {
     grid-template-columns: repeat(2, 1fr);
@@ -194,6 +352,4 @@ button:hover {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-
 
