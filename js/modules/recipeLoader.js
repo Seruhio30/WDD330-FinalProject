@@ -1,4 +1,5 @@
-import {showRecipeDetails} from './recipeDetails';
+
+import { showRecipeDetails } from './js/modules/recipeDetails.js';
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
