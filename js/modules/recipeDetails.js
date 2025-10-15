@@ -10,15 +10,20 @@ import { saveToFavorites } from './favoritesHandler.js';
 
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
-export async function showRecipeDetails(id, userIngredients = []) {
+export async function showRecipeDetails(id) {
   const apiKey = '3486456142aa411da24e68f88aa2348b';
   const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
 
-  const res = await fetch(url);
-  const data = await res.json();
-
-  renderDetails(data, userIngredients);
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    renderDetails(data, []); // Usamos array vacío si no hay ingredientes
+  } catch (error) {
+    document.getElementById('results').innerHTML = '<p>❌ Error al cargar la receta.</p>';
+    console.error('Error al obtener receta:', error);
+  }
 }
+
 
 
 // Renders recipe details and connects buttons
