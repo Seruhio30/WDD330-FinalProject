@@ -6,7 +6,7 @@ import { renderRecipes } from './resultsView.js'; // Para volver a la lista
 import { fetchNutritionForIngredient } from './nutritionixHandler.js';
 import { lastIngredients, lastResults } from './ingredientSearch.js';
 import { saveToFavorites } from './favoritesHandler.js';
-
+/*
 
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
@@ -132,4 +132,24 @@ export async function renderNutritionBox(ingredients) {
     </ul>
     ${sinDatos.length > 0 ? `<p class="note">⚠️ Sin datos para: ${sinDatos.join(', ')}</p>` : ''}
   `;
+}
+*/
+
+export async function showRecipeDetails(id) {
+  const apiKey = '3486456142aa411da24e68f88aa2348b';
+  const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const container = document.getElementById('results');
+    container.innerHTML = `
+      <h2>${data.title}</h2>
+      <img src="${data.image}" alt="${data.title}" style="max-width: 100%; border-radius: 8px;" />
+    `;
+  } catch (error) {
+    document.getElementById('results').innerHTML = '<p>❌ Error al cargar la receta.</p>';
+    console.error('Error al obtener receta:', error);
+  }
 }

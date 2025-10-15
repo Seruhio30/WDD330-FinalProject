@@ -1,8 +1,5 @@
 
-
-
 import { showRecipeDetails } from './js/modules/recipeDetails.js';
-
 
 
 
