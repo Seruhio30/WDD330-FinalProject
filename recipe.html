@@ -34,10 +34,43 @@
     </header>
 
     <main id="results"></main>
-       
-        <footer></footer>
-      <script type="module" src="./js/modules/recipeLoader.js"></script>
-     
+
+    <footer></footer>
+    <script>
+        async function showRecipeDetails(id) {
+            const apiKey = '3486456142aa411da24e68f88aa2348b';
+            const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                const container = document.getElementById('results');
+                container.innerHTML = `
+        <h2>${data.title}</h2>
+        <img src="${data.image}" alt="${data.title}" style="max-width: 100%; border-radius: 8px;" />
+        <p><strong>Tiempo estimado:</strong> ${data.readyInMinutes} minutos</p>
+        <h3>Ingredientes:</h3>
+        <ul>${data.extendedIngredients.map(ing => `<li>${ing.original}</li>`).join('')}</ul>
+        <h3>Instrucciones:</h3>
+        <p>${data.instructions || 'No hay instrucciones disponibles.'}</p>
+      `;
+            } catch (error) {
+                document.getElementById('results').innerHTML = '<p>❌ Error al cargar la receta.</p>';
+                console.error('Error al obtener receta:', error);
+            }
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+            showRecipeDetails(id);
+        } else {
+            document.getElementById('results').innerHTML = '<p>❌ No se encontró ninguna receta.</p>';
+        }
+    </script>
+
+
 
 
 </body>
