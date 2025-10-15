@@ -10,14 +10,14 @@ import { saveToFavorites } from './favoritesHandler.js';
 
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
-export async function showRecipeDetails(id) {
+export async function showRecipeDetails(id, lastIngredients) {
   const apiKey = '3486456142aa411da24e68f88aa2348b';
   const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
 
   const res = await fetch(url);
   const data = await res.json();
 
-  renderDetails(data, lastIngredients); // Renderiza detalles y pasa ingredientes del usuario
+  renderDetails(data, userIngredients); // Renderiza detalles y pasa ingredientes del usuario
 }
 
 // Renders recipe details and connects buttons

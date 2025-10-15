@@ -1,5 +1,7 @@
 
 import { showRecipeDetails } from './js/modules/recipeDetails.js';
+import { lastIngredients } from './js/modules/ingredientSearch.js';
+
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
