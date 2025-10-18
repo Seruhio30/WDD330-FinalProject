@@ -6,7 +6,7 @@ import { renderRecipes } from './resultsView.js'; // Para volver a la lista
 import { fetchNutritionForIngredient } from './nutritionixHandler.js';
 import { lastIngredients, lastResults } from './ingredientSearch.js';
 import { saveToFavorites } from './favoritesHandler.js';
-/*
+
 
 // Fetches full recipe info from Spoonacular by ID
 // Obtiene información completa de la receta desde Spoonacular por ID
@@ -17,7 +17,7 @@ export async function showRecipeDetails(id) {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    renderDetails(data, []); // Usamos array vacío si no hay ingredientes
+    renderDetails(data, lastIngredients); // Usamos array vacío si no hay ingredientes
   } catch (error) {
     document.getElementById('results').innerHTML = '<p>❌ Error al cargar la receta.</p>';
     console.error('Error al obtener receta:', error);
@@ -61,6 +61,8 @@ export function renderDetails(recipe, userIngredients) {
   });
 
   // Botón de favoritos ♥
+
+
   const favBtn = document.createElement('button');
   favBtn.textContent = '♥';
   favBtn.className = 'fav-btn';
@@ -68,13 +70,16 @@ export function renderDetails(recipe, userIngredients) {
 
   favBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    saveToFavorites(recipe.id, recipe.title);
+    console.log('🖼️ Imagen de receta:', recipe.image);
+
+    saveToFavorites(recipe.id, recipe.title, recipe.image);
     favBtn.textContent = '❤️';
 
     // Activar animación
     favBtn.classList.add('saved');
     setTimeout(() => favBtn.classList.remove('saved'), 400);
   });
+
 
   // Insertar el botón justo después del título
   const titleElement = container.querySelector('h2');
@@ -133,23 +138,5 @@ export async function renderNutritionBox(ingredients) {
     ${sinDatos.length > 0 ? `<p class="note">⚠️ Sin datos para: ${sinDatos.join(', ')}</p>` : ''}
   `;
 }
-*/
 
-export async function showRecipeDetails(id) {
-  const apiKey = '3486456142aa411da24e68f88aa2348b';
-  const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
 
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-
-    const container = document.getElementById('results');
-    container.innerHTML = `
-      <h2>${data.title}</h2>
-      <img src="${data.image}" alt="${data.title}" style="max-width: 100%; border-radius: 8px;" />
-    `;
-  } catch (error) {
-    document.getElementById('results').innerHTML = '<p>❌ Error al cargar la receta.</p>';
-    console.error('Error al obtener receta:', error);
-  }
-}

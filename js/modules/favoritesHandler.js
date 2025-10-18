@@ -1,4 +1,4 @@
-export function saveToFavorites(id, title) {
+export function saveToFavorites(id, title, image) {
   let stored;
   try {
     stored = JSON.parse(localStorage.getItem('favorites'));
@@ -9,8 +9,10 @@ export function saveToFavorites(id, title) {
 
   const exists = stored.some(item => item.id === id);
   if (!exists) {
-    stored.push({ id, title });
+    stored.push({ id, title, image });
     localStorage.setItem('favorites', JSON.stringify(stored));
-    console.log(`✅ Guardado en favoritos: ${title}`);
+
+
+
   }
 }
