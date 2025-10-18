@@ -337,7 +337,7 @@ button:hover {
 }
 
 .recipe-card img {
-  max-width: 100%;
+  max-width: 70%;
   border-radius: 6px;
 }
 
